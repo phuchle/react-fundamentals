@@ -1,18 +1,18 @@
 var axios = require('axios');
 
-var id = "YOUR_CLIENT_ID";
-var sec = "secret"
+var id = "71ec4aa78fc91f80b81f";
+var sec = "8e8dc01f3323d78eeba6afdf6188c6d258f630e2"
 var params = "?client_id=" + id + "&client_secret=" + sec;
 
 function getProfile(username) {
-  return axios.get('https://api.github.com/users/' + username)
+  return axios.get('https://api.github.com/users/' + username + params)
     .then((user) => {
       return user.data;
     });
 }
 
 function getRepos(username) {
-  return axios.get('https://api.github.com/users/' + username + '/repos' + '&per_page=100');
+  return axios.get('https://api.github.com/users/' + username + '/repos' + params + '&per_page=100');
 }
 
 function getStarCount(repos) {
@@ -57,6 +57,7 @@ function sortPlayers(players) {
 module.exports = {
   battle: function(players) {
     return axios.all(players.map(getUserData))
+      .then(sortPlayers);
   },
   fetchPopularRepos: function(language) {
     var encodedURI = window.encodeURI('https://api.github.com/search/repositories?q=stars:>1+language:'+ language + '&sort=stars&order=desc&type=Repositories');
